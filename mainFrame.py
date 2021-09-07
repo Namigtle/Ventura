@@ -12,7 +12,6 @@ import LevaBraille
 import serial
 import Grafica
 import math
-import prueba
 
 comlist = serial.tools.list_ports.comports()
 connected = []
