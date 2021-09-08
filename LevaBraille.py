@@ -175,23 +175,5 @@ def ObtenerXY(Cadena):
             Seccion1 = Cadena[item].split(':')[1]
             Dato.append(Seccion1.split(','))
     return Dato
-
-
-"""	IndexFC = False
-	for n in range(0,len(TextTraducido)):
-		residuo = 0
-		for m in range(0,len(TextTraducido[1])):
-			if (TextTraducido[n][m] == 1):
-				if m == 0:
-					ArregloEntradas.append('a')
-				elif m == 1:
-					ArregloEntradas.append('b')
-				elif m == 2:
-					ArregloEntradas.append('c')
-				FlancoCoor.append(IndexFC)
-			else:
-				residuo = residuo + 1
-			if residuo == 3:
-				ArregloEntradas.append('0')
-				FlancoCoor.append(IndexFC)
-		IndexFC = not IndexFC"""
+#X=-123.123654789
+#print(f'X:{X:0.3f}')

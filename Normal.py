@@ -1,3 +1,6 @@
+from tkinter import Frame
+from tkinter import *
+from tkinter import filedialog
 import matplotlib.pyplot as plt
 import numpy as np
 import ABCBRAILLE
@@ -23,56 +26,69 @@ class Dimensiones:
     MatPos= [   ["a","b"],
                 ["c","d"],
                 ["e","f"]]
-x=[]
-y=[]
-mensaje = ABCBRAILLE.AsignaBraille(ABCBRAILLE.AsignaASCII("""
-hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
-hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo"""))
-Hojas = math.ceil(len(mensaje)/(Dimensiones.Caracteres*Dimensiones.Renglones))
+def Traduccion(Mensaje1):
+    ruta=filedialog.asksaveasfilename(title="Guardadar como:", filetypes = (('text files', '*.txt'),('All files', '*.*')))
+    archivo = open(ruta,'w',encoding="utf-8")
+    Mensaje = ABCBRAILLE.AsignaBraille(ABCBRAILLE.AsignaASCII(Mensaje1))
+    Hojas = math.ceil(len(Mensaje)/(Dimensiones.Caracteres*Dimensiones.Renglones))
+    x=[]
+    y=[]
+    Envio = ""
+    acumulado = 0
+    finalizado = True
+    h=0
+    while (h<Hojas) and finalizado:
+        n=0
+        while (n<Dimensiones.Renglones) and finalizado:
+            j=0
+            while (j<Dimensiones.filas) and finalizado:
+                l=0
+                while (l<Dimensiones.Caracteres) and finalizado:
+                    m=0
+                    while (m<Dimensiones.columnas) and finalizado:
+                        if l+acumulado < len(Mensaje):
+                            if Mensaje[l+acumulado][j][m] == 1:
+                                x.append((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l))
+                                y.append((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n))
+                                Envio = Envio + "G:42" + '\n'
+                                archivo.write("G:42"+'\n')
+                                Envio = Envio + (("C:" + str((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l)) + 
+                                    "," + str((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n)))) + '\n'
+                                archivo.write((("C:" + str((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l)) + 
+                                    "," + str((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n)))) + '\n')
+                                Envio = Envio + "G:49" + '\n'
+                                archivo.write("G:49"+'\n')
+                        else:
+                            l=Dimensiones.Caracteres
+                            if j>1:
+                                finalizado = False
+                        m+=1
+                    l+=1
+                j+=1
+            acumulado += 1
+            n+=1
+        h+=1
+        if finalizado and h<Hojas:
+            archivo.write("G:42"+'\n')
+            archivo.write("C:" + str(Dimensiones.Mizq) + "," + "300.0000" + '\n')
+            Envio = Envio + "H" + '\n'
+            archivo.write("H"+'\n')
+            Previsualizar(x,y)
+            x=[]
+            y=[]
+    Envio = Envio + "f" + '\n'
+    archivo.write("f"+'\n')
+    archivo.close()  
 
-Envio = ""
-acumulado = 0
-finalizado = True
-h=0
-while (h<Hojas) and finalizado:
-    n=0
-    while (n<Dimensiones.Renglones) and finalizado:
-        j=0
-        while (j<Dimensiones.filas) and finalizado:
-            l=0
-            while (l<Dimensiones.Caracteres) and finalizado:
-                m=0
-                while (m<Dimensiones.columnas) and finalizado:
-                    if l+acumulado < len(mensaje):
-                        #print(mensaje[l+acumulado][j][m], end=' ')
-                        if mensaje[l+acumulado][j][m] == 1:
-                            x.append((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l))
-                            y.append((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n))
-                            Envio = Envio + "G:0" + '\n'
-                            Envio = Envio + (("C:" + str((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l)) + 
-                                "," + str((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n)))) + '\n'
-                            Envio = Envio + "G:100" + '\n'
-                    else:
-                        l=Dimensiones.Caracteres
-                        if j>1:
-                            finalizado = False
-                    m+=1
-                #print(end=' ')
-                l+=1
-            #print(end='\n')
-            j+=1
-        acumulado += 1
-        #print(end='\n')
-        n+=1
-    if finalizado:
-        Envio = Envio + "H" + '\n'
-        Previsualizar(x,y)
-        x=[]
-        y=[]
-    h+=1
-Envio = Envio + "f" + '\n'
-
-print("Cambio")
-#print(Envio)
-
-print(Hojas)
+Traduccion("""hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo
+hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo hola mundo""")
