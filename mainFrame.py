@@ -19,7 +19,7 @@ for element in comlist:
     connected.append(element.device)
 class MainFrame(Frame):
     def __init__(self, master=None):
-        super().__init__(master, width=900, height=800)
+        super().__init__(master, width=1400, height=800)
         self.master=master
         self.pack(side="left")
     # Variables del Panel conexión:
@@ -62,6 +62,7 @@ class MainFrame(Frame):
         self.BotonImprimir = tk.PhotoImage(file="ImImprimir.png") # imagen del botón
         self.BotonPrevisualizar = tk.PhotoImage(file="Prev.png") # imagen del botón
         self.BotonEstado = tk.PhotoImage(file="BotEst.png") # imagen del boton 
+        self.BotonImprimirArchivo = tk.PhotoImage(file="BotIA.png") # imagen del boton 
         self.create_widgets()
 
 # Funciones del Panel conexión: 
@@ -165,6 +166,28 @@ class MainFrame(Frame):
             Ciclo =(Mega.readline().decode('ascii'))=='F' 
         Mega.close()
         self.text_area.insert(tk.INSERT,Mensaje)
+    def ImprimirArchivo(self):
+        Mega=self.Dispositivo
+        ruta = filedialog.askopenfilename(title="Abrir")
+        archivo = open(ruta,'r', encoding="utf-8") 
+        self.text_area.delete("1.0", tk.END)
+        Mega.write("I".encode('ascii'))
+        Mega.flush()
+        Ciclo=False
+        while not Ciclo:
+            Ciclo =(Mega.readline().decode('ascii'))=='F' 
+        Mega.write(archivo.read().encode('ascii'))
+        Mega.flush()
+        Ciclo=False
+        while not Ciclo:
+            Ciclo =(Mega.readline().decode('ascii'))=='F' 
+        Mega.write("W".encode('ascii'))
+        Mega.flush()
+        Ciclo=False
+        while not Ciclo:
+            Ciclo =(Mega.readline().decode('ascii'))=='F' 
+        Mega.close()
+        self.text_area.insert(tk.INSERT,archivo.read())
     def LeerCampo(self, event):
         self.LeerCampo2()
     def Previsualizar(self):
@@ -186,37 +209,36 @@ class MainFrame(Frame):
     def create_widgets(self):
 
 # Espacio para Panel "Manipular maquina":
-
-        XPMM=0 # posicion del panel en X
-        YPMM=100 # posicion del panel en Y
+        XPMM=900 # posicion del panel en X
+        YPMM=0 # posicion del panel en Y
     # Etiquetas: 
         Label(self,image=self.PanelManipularMaquina, # Panel y etiquetas
-        bg=("#%02x%02x%02x"%(70,70,71))).place(x=18+XPMM, y=330+YPMM)    
+        bg=("#%02x%02x%02x"%(70,70,71))).place(x=18+XPMM, y=YPMM)    
     # Menú de opciones:
         self.VarResolucion.set('1') # Menú de resoluciones
         OptionMenu(self,self.VarResolucion,
-        *self.MenuResoluciones).place(x=152+XPMM,y=572+YPMM)
+        *self.MenuResoluciones).place(x=152+XPMM,y=242+YPMM)
     # botones
         Button(self, image=self.BotonFlechaDerecha, 
-        border="0", command=self.CarroPositivo,background
-        =("#%02x%02x%02x" % (20,20,21))).place(
-        x=465-300+XPMM, y =455+YPMM) # Boton flecha derecha
+            border="0", command=self.CarroPositivo,background
+            =("#%02x%02x%02x" % (20,20,21))).place(
+            x=465-300+XPMM, y =125+YPMM) # Boton flecha derecha
         Button(self, image=self.BotonFlechaIzquierda, 
-        border="0", command=self.CarroNegativo,background
-        =("#%02x%02x%02x" % (20,20,21))).place(
-        x=365-300+XPMM, y =455+YPMM) # Boton flecha izquierda
+            border="0", command=self.CarroNegativo,background
+            =("#%02x%02x%02x" % (20,20,21))).place(
+            x=365-300+XPMM, y =125+YPMM) # Boton flecha izquierda
         Button(self, image=self.BotonFlechaArriba, 
-        border="0", command=self.RodilloPositivo,background
-        =("#%02x%02x%02x" % (20,20,21))).place(
-        x=425-300+XPMM, y =395+YPMM) # Boton flecha arriba 
+            border="0", command=self.RodilloPositivo,background
+            =("#%02x%02x%02x" % (20,20,21))).place(
+            x=425-300+XPMM, y =65+YPMM) # Boton flecha arriba 
         Button(self, image=self.BotonFlechaAbajo, 
-        border="0", command=self.RodilloNegativo,background
-        =("#%02x%02x%02x" % (20,20,21))).place(
-        x=425-300+XPMM, y =495+YPMM) # Boton flecha abajo
+            border="0", command=self.RodilloNegativo,background
+            =("#%02x%02x%02x" % (20,20,21))).place(
+            x=425-300+XPMM, y =165+YPMM) # Boton flecha abajo
         Button(self, image=self.BotonGrabar, 
-        border="0", command=self.Grabar,background
-        =("#%02x%02x%02x" % (20,20,21))).place(
-        x=425+XPMM, y =495+YPMM) # Boton flecha abajo
+            border="0", command=self.Grabar,background
+            =("#%02x%02x%02x" % (20,20,21))).place(
+            x=45+XPMM, y =285+YPMM) # Boton flecha abajo
 # Espacio para Panel "Conexión":
     # Etiquetas:
         Label(self, image=self.PanelConexion,bg=("#%02x%02x%02x" 
@@ -247,24 +269,27 @@ class MainFrame(Frame):
     # Campos de texto:
         self.CapturaTexto.set("Ingrese el texto a traducir...") # Captura de texto (lee el texto ingresado)
         self.campo=Entry(self,textvariable=self.CapturaTexto,
-        font=("Console",15),fg="Light Gray")
+            font=("Console",15),fg="Light Gray")
         self.campo.bind('<Key-Return>',self.LeerCampo)
         self.campo.place(x=XPA+20,y=60+YPA)
     # Textos dezplasables:
         self.text_area = st.ScrolledText(self,width=60,height=8,font=("Console",10),
-        fg="Gray") # Campo en el cual se muestran errores y parametros
+            fg="Gray") # Campo en el cual se muestran errores y parametros
         self.text_area.grid(column=0,pady=10,padx=10)
-        self.text_area.place(x=XPA+20,y=230+YPA)
+        self.text_area.place(x=XPA+20,y=403+YPA)
     # Botones:       
         Button(self,image=self.BotonAbrir,border="0",command=self.TraducirArchivo,background=
-        ("#%02x%02x%02x" %(20,20,21))).place(x=0+XPA,y=110+YPA) # Botón abrir archivo
+            ("#%02x%02x%02x" %(20,20,21))).place(x=0+XPA,y=110+YPA) # Botón abrir archivo
         Button(self, image=self.BotonTraducir,border="0", command=self.LeerCampo2,background=
-        ("#%02x%02x%02x" % (20,20,21))).place(x=100+XPA,y=110+YPA) # Botón traducir
+            ("#%02x%02x%02x" % (20,20,21))).place(x=100+XPA,y=110+YPA) # Botón traducir
         Button(self, image=self.BotonImprimir,border="0", command=self.Imprimir,background=
-        ("#%02x%02x%02x" % (20,20,21))).place(x=200+XPA,y=110+YPA) # Botón imprimir
+            ("#%02x%02x%02x" % (20,20,21))).place(x=200+XPA,y=110+YPA) # Botón imprimir
         Button(self, image=self.BotonPrevisualizar,border="0", command=self.Previsualizar,background=
-        ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=110+YPA) # Botón previsualizar 
+            ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=110+YPA) # Botón previsualizar 
         Button(self, image=self.BotonEstado,border="0", command=self.Revisar,background=
-        ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=50+YPA) # Botón previsualizar 
+            ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=180+YPA) # Botón Revisar 
         Button(self, image=self.BotonGuardar,border="0", command=self.Guardar,background=
-        ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=450+YPA) # Botón previsualizar 
+            ("#%02x%02x%02x" % (20,20,21))).place(x=XPA,y=200+YPA) # Botón  
+        Button(self, image=self.BotonImprimirArchivo,border="0", command=self.ImprimirArchivo,background=
+            ("#%02x%02x%02x" % (20,20,21))).place(x=XPA+200,y=200+YPA) # Botón  
+    

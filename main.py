@@ -7,7 +7,4 @@ def main():
     app=MainFrame(root)
     app.configure(bg=("#%02x%02x%02x" % (70,70,71)))
     app.mainloop()
-main()  
-
-
-
+main()

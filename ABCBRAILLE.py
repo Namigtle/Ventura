@@ -1087,7 +1087,7 @@ def AsignaBraille(ArregloAscii):
             Entradas.append([TextoBraille[z][2][y],
             TextoBraille[z][1][y],TextoBraille[z][0][y]]) # agrega columna 
             # por columna de cada letra braille a la variable de salida
-    return TextoBraille # regresa el arreglo de salida 
+    return TextoBraille#Entradas # regresa el arreglo de salida 
 def ObtenerCoordenadas(CantidadCaracteres):
     Ancho = 210 # ancho de la hoja
     Largo = 297 # largo de la hoja
@@ -1110,4 +1110,3 @@ def ObtenerCoordenadas(CantidadCaracteres):
                     EnviaXY.append([Cx, Cy]) # Agrega las coordenadas X y Y al arreglo EnviaXY
     EnviaXY.append([Cx,Cy])
     return EnviaXY # Regresa el arreglo como parametro de salida de la función 
-

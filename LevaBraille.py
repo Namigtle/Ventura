@@ -175,5 +175,3 @@ def ObtenerXY(Cadena):
             Seccion1 = Cadena[item].split(':')[1]
             Dato.append(Seccion1.split(','))
     return Dato
-#X=-123.123654789
-#print(f'X:{X:0.3f}')
