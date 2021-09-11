@@ -119,6 +119,19 @@ class MainFrame(Frame):
         Mega=self.Dispositivo # Asigna el objeto serial
         Ymenos = "A" # Asigna el parametro a enviar
         Mega.write(Ymenos.encode('ascii')) # Envia el parametro
+    def Revisar(self):
+        Mega = self.Dispositivo
+        self.text_area.delete("1.0", tk.END)
+        Mega.write("B".encode('ascii'))
+        Ciclo=False
+        Lectura = ""
+        while not Ciclo:
+            Lectura = Mega.readline().decode('ascii')
+            if len(Lectura) > 1:
+                if (Lectura[0] == "L"):
+                    self.text_area.insert(tk.INSERT,Lectura+'\n')
+                    Lectura="F"
+            Ciclo =Lectura=='F'
 # Funciones del Panel archivo:
     def TraducirArchivo(self):
         ruta=filedialog.askopenfilename(title="Abrir") # Pregunta por la ruta y el nombre 
@@ -193,19 +206,6 @@ class MainFrame(Frame):
     def Previsualizar(self):
         datos=LevaBraille.ObtenerXY(self.EnviarParametros)
         Grafica.Previsualizacion(datos)
-    def Revisar(self):
-        Mega = self.Dispositivo
-        self.text_area.delete("1.0", tk.END)
-        Mega.write("B".encode('ascii'))
-        Ciclo=False
-        Lectura = ""
-        while not Ciclo:
-            Lectura = Mega.readline().decode('ascii')
-            if len(Lectura) > 1:
-                if (Lectura[0] == "L"):
-                    self.text_area.insert(tk.INSERT,Lectura+'\n')
-                    Lectura="F"
-            Ciclo =Lectura=='F'
     def create_widgets(self):
 
 # Espacio para Panel "Manipular maquina":
@@ -217,28 +217,30 @@ class MainFrame(Frame):
     # Menú de opciones:
         self.VarResolucion.set('1') # Menú de resoluciones
         OptionMenu(self,self.VarResolucion,
-        *self.MenuResoluciones).place(x=152+XPMM,y=242+YPMM)
+        *self.MenuResoluciones).place(x=152+XPMM,y=335+YPMM)
     # botones
         Button(self, image=self.BotonFlechaDerecha, 
             border="0", command=self.CarroPositivo,background
             =("#%02x%02x%02x" % (20,20,21))).place(
-            x=465-300+XPMM, y =125+YPMM) # Boton flecha derecha
+            x=465-300+XPMM, y =220+YPMM) # Boton flecha derecha
         Button(self, image=self.BotonFlechaIzquierda, 
             border="0", command=self.CarroNegativo,background
             =("#%02x%02x%02x" % (20,20,21))).place(
-            x=365-300+XPMM, y =125+YPMM) # Boton flecha izquierda
+            x=65+XPMM, y =220+YPMM) # Boton flecha izquierda
         Button(self, image=self.BotonFlechaArriba, 
             border="0", command=self.RodilloPositivo,background
             =("#%02x%02x%02x" % (20,20,21))).place(
-            x=425-300+XPMM, y =65+YPMM) # Boton flecha arriba 
+            x=425-300+XPMM, y =160+YPMM) # Boton flecha arriba 
         Button(self, image=self.BotonFlechaAbajo, 
             border="0", command=self.RodilloNegativo,background
             =("#%02x%02x%02x" % (20,20,21))).place(
-            x=425-300+XPMM, y =165+YPMM) # Boton flecha abajo
+            x=425-300+XPMM, y =260+YPMM) # Boton flecha abajo
         Button(self, image=self.BotonGrabar, 
             border="0", command=self.Grabar,background
             =("#%02x%02x%02x" % (20,20,21))).place(
-            x=45+XPMM, y =285+YPMM) # Boton flecha abajo
+            x=45+XPMM, y =385+YPMM) # Boton flecha abajo
+        Button(self, image=self.BotonEstado,border="0", command=self.Revisar,background=
+            ("#%02x%02x%02x" % (20,20,21))).place(x=45+XPMM,y=80+YPMM) # Botón Revisar 
 # Espacio para Panel "Conexión":
     # Etiquetas:
         Label(self, image=self.PanelConexion,bg=("#%02x%02x%02x" 
@@ -286,8 +288,6 @@ class MainFrame(Frame):
             ("#%02x%02x%02x" % (20,20,21))).place(x=200+XPA,y=110+YPA) # Botón imprimir
         Button(self, image=self.BotonPrevisualizar,border="0", command=self.Previsualizar,background=
             ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=110+YPA) # Botón previsualizar 
-        Button(self, image=self.BotonEstado,border="0", command=self.Revisar,background=
-            ("#%02x%02x%02x" % (20,20,21))).place(x=300+XPA,y=180+YPA) # Botón Revisar 
         Button(self, image=self.BotonGuardar,border="0", command=self.Guardar,background=
             ("#%02x%02x%02x" % (20,20,21))).place(x=XPA,y=200+YPA) # Botón  
         Button(self, image=self.BotonImprimirArchivo,border="0", command=self.ImprimirArchivo,background=

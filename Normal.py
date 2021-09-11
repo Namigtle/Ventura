@@ -61,7 +61,7 @@ def Traduccion(Mensaje1):
                                 y.append(((Dimensiones.Msup) +
                                          (Dimensiones.b*j)+(Dimensiones.d*n)))
                                 archivo.write("G:42"+'\n')
-                                archivo.write('C:' + f'{216-((Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l)):0.3f}' +
+                                archivo.write('C:' + f'{(Dimensiones.Mizq)+(Dimensiones.a*m)+(Dimensiones.c*l):0.3f}' +
                                               ',' + f'{((Dimensiones.Msup)+(Dimensiones.b*j)+(Dimensiones.d*n)):0.3f}' + '\n')
                                 archivo.write("G:49"+'\n')
                         else:
@@ -77,13 +77,20 @@ def Traduccion(Mensaje1):
         Previsualizar(x,y)
         x = []
         y = []
+        fn = True
         if finalizado and h < Hojas:
+            fn = False
             archivo.write("G:42"+'\n')
             archivo.write("C:" + str(Dimensiones.Mizq) +
                           "," + "300.0000" + '\n')
             archivo.write("H"+'\n')
+    if fn:
+        archivo.write("G:42"+'\n')
+        archivo.write("C:" + str(Dimensiones.Mizq) +
+            "," + "300.0000" + '\n')
     archivo.write("f"+'\n')
     archivo.close()
 
 
-Traduccion("""hola mundo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa adios mundo""")
+Traduccion("""El sistema braille o lenguaje para ciegos es el que utilizan las personas con discapacidad visual o ceguera para poder escribir y leer textos libros y documentos Se trata de un sistema de lectura y escritura tactil
+Su inventor fue Luis Braille 1809 1852 frances nacido el 4 de enero de 1809 Braille era ciego desde los tres años y al crecer y formarse empezo a ejercer como profesor de un instituto para ciegos en Paris Pronto saco su propio sistema de lecto escritura a traves de grupos de puntos""")
